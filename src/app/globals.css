@@ -1,95 +1,78 @@
-/* Layout: coluna única de terminal, como uma página de puzzle; calendário no topo, um dia por vez. */
-:root {
-  --bg: #0b0e17;       /* céu profundo */
-  --panel: #121828;    /* fundo de código e figuras */
-  --line: #232c44;
-  --fg: #c6ccda;
-  --dim: #6c7590;
-  --gold: #f4c04e;     /* estrelas e destaques */
-  --ice: #8ab8ff;      /* links e ações */
-  --ok: #72d495;
-  --err: #ff8270;
-  --mono: var(--font-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  color-scheme: dark;
-}
-* { box-sizing: border-box; }
+/* Estilo copiado do Advent of Code: fundo azul-noite, verde com brilho, tudo em monoespaçada. */
 body {
+  background: #0f0f23;
+  color: #cccccc;
+  font-family: var(--font-mono), "Source Code Pro", monospace;
+  font-weight: 300;
+  font-size: 14pt;
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font: 15px/1.6 var(--mono);
-  padding-block: 24px 64px;
-  padding-inline: 16px;
+  padding: 0 16px;
 }
-.wrap { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
-a { color: var(--ice); text-decoration: none; }
-a:hover, a:focus-visible { text-decoration: underline; }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-
-header { display: flex; flex-direction: column; gap: 6px; }
-.logo { font-size: 1.6rem; font-weight: 700; color: var(--ok); text-shadow: 0 0 6px rgba(114, 212, 149, .45); letter-spacing: .02em; }
-.logo:hover { text-decoration: none; }
-.logo span { color: var(--dim); font-weight: 400; text-shadow: none; }
-.sub { color: var(--dim); }
-.score { color: var(--gold); }
-
-.cal { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; }
-.cal .dia {
-  background: var(--panel); color: var(--fg); border: 1px solid var(--line);
-  padding: 8px 0 6px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+img { border: 0; }
+a { text-decoration: none; color: #009900; outline: none; }
+a:hover, a:focus { color: #99ff99; }
+h1, h2 { font-size: 1em; font-weight: normal; }
+code { position: relative; display: inline-block; margin: 0; padding: 0; }
+code::before {
+  z-index: -1; content: ""; position: absolute; display: block;
+  left: -2px; right: -2px; top: 3px; bottom: 0;
+  border: 1px solid #333340; background: #10101a;
 }
-.cal a.dia:hover { text-decoration: none; border-color: var(--dim); }
-.cal .dia[aria-current="page"] { border-color: var(--gold); color: var(--gold); }
-.cal .dia.off { color: var(--line); cursor: default; }
-.cal .n { font-weight: 600; font-variant-numeric: tabular-nums; }
-.cal .s { font-size: .8rem; color: var(--dim); min-height: 1.2em; }
-.cal .s.got { color: var(--gold); text-shadow: 0 0 5px rgba(244, 192, 78, .6); }
-@media (max-width: 560px) { .cal { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
-
-article { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-article h2 { font-size: 1.05rem; font-weight: 700; color: #fff; margin: 0; text-wrap: balance; }
-article h2::before { content: "--- "; color: var(--dim); font-weight: 400; }
-article h2::after { content: " ---"; color: var(--dim); font-weight: 400; }
-article p, article ul { margin: 0; max-width: 72ch; }
-article ul { padding-left: 1.4em; display: flex; flex-direction: column; gap: 4px; }
-em { color: #fff; font-style: normal; text-shadow: 0 0 5px rgba(255, 255, 255, .5); }
-em.star { color: var(--gold); text-shadow: 0 0 5px rgba(244, 192, 78, .7); }
-code { font-family: var(--mono); background: var(--panel); border: 1px solid var(--line); padding: 0 4px; white-space: nowrap; }
-
-figure { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.imgs { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
-.imgs img, figure > img { display: block; background: var(--panel); border: 1px solid var(--line); max-width: 100%; height: auto; }
-.px { image-rendering: pixelated; }
-figcaption { color: var(--dim); font-size: .85rem; }
-
-.answer { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 0; border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line); }
-.answer label { color: var(--fg); }
-.answer input {
-  font: inherit; background: var(--panel); color: #fff; border: 1px solid var(--line);
-  padding: 4px 8px; width: 14ch; max-width: 100%;
+input[type="text"] {
+  background: #10101a; border: 1px solid #666666; color: inherit;
+  font-family: inherit; font-size: inherit; font-weight: inherit; margin: 0; padding: 0 2px;
 }
-.answer button { font: inherit; background: none; border: none; color: var(--ice); cursor: pointer; padding: 4px 2px; }
-.answer button:disabled { color: var(--dim); cursor: wait; }
-.answer button::before { content: "["; color: var(--dim); }
-.answer button::after { content: "]"; color: var(--dim); }
-.msg { flex-basis: 100%; min-height: 1.6em; }
-.msg.ok { color: var(--ok); }
-.msg.err { color: var(--err); }
-
-details { border-left: 2px solid var(--line); padding-left: 14px; }
-details[open] { border-left-color: var(--gold); }
-summary { cursor: pointer; color: var(--gold); }
-details > * + * { margin-top: 14px; }
-pre {
-  margin: 0; background: var(--panel); border: 1px solid var(--line); padding: 12px 14px;
-  overflow-x: auto; font: 13px/1.55 var(--mono); color: #dde3f0;
+button.submit {
+  background: transparent; border: 0; font-family: inherit; font-size: inherit; font-weight: inherit;
+  margin: 0; padding: 0; color: #009900; cursor: pointer;
 }
-pre .c { color: var(--dim); }
-.trap { color: var(--dim); }
-.trap b { color: var(--fg); font-weight: 600; }
-.dias { list-style: none; padding: 0; }
-.dias .num { color: var(--dim); font-variant-numeric: tabular-nums; }
-.dias .got { color: var(--gold); }
-.nav-dia { display: flex; justify-content: space-between; gap: 12px; }
-footer { color: var(--dim); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 12px; }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+button.submit:hover, button.submit:focus { color: #99ff99; }
+button.submit:disabled { color: #666666; cursor: wait; }
+*::selection { background: #5f5f5f; }
+
+header { white-space: nowrap; margin: 1em 0 2em; }
+header > div { display: flex; flex-wrap: wrap; align-items: baseline; }
+header h1 { display: inline-block; margin: 0; padding-right: 1em; }
+header h1 a, header h1 span {
+  display: inline-block; text-decoration: none; color: #00cc00;
+  text-shadow: 0 0 2px #00cc00, 0 0 5px #00cc00;
+}
+header h1 a:hover { color: #99ff99; text-shadow: 0 0 2px #99ff99, 0 0 5px #99ff99; }
+header h1.title-event .title-event-wrap { opacity: 0.33; white-space: pre; }
+header nav ul { list-style: none; padding: 0; margin: 0; display: inline-block; }
+header nav li { display: inline-block; padding: 0 0.6em; }
+header .user { padding-left: 1em; }
+.star-count { color: #ffff66; }
+
+main { max-width: 45em; }
+article { margin-bottom: 2em; }
+article h2 { color: #ffffff; margin-top: 0; margin-bottom: 1em; }
+article p { margin: 0 0 1em; }
+article em { color: #ffffff; font-style: normal; text-shadow: 0 0 5px #ffffff; }
+article em.star { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
+article a { white-space: nowrap; }
+article ul { list-style: none; padding: 0; margin: 0 0 1em; }
+article li { padding-left: 2.5em; position: relative; }
+article li::before { content: "\00a0\00a0-\00a0"; position: absolute; left: 0; }
+article figure { margin: 0 0 1em; }
+article figure img { display: block; max-width: 100%; height: auto; border: 1px solid #333340; image-rendering: pixelated; }
+article .imgs { display: flex; flex-wrap: wrap; gap: 1em; }
+.day-success { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
+.wrong { color: #ff6666; }
+
+/* Calendário em ASCII da página inicial */
+.calendar { white-space: pre; font-family: inherit; line-height: 1.2; margin: 0 0 2em; overflow-x: auto; }
+.calendar a, .calendar > span { display: block; color: #666666; }
+.calendar a:hover { background: #1e1e46; }
+.calendar .c-dot { color: #444466; }
+.calendar .c-star { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
+.calendar .c-art { color: #9999cc; }
+.calendar .calendar-day { color: #cccccc; }
+.calendar a:hover .calendar-day { color: #ffffff; }
+.calendar .calendar-mark { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
+.calendar .locked { color: #333340; }
+
+@media (max-width: 600px) {
+  body { font-size: 12pt; }
+  header { white-space: normal; }
+}

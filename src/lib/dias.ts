@@ -1,10 +1,19 @@
 export const TOTAL_DIAS = 12;
 
-export const DIAS = [
-  { n: 1, titulo: "Censo Estelar" },
-  { n: 2, titulo: "Sussurro no Azul" },
-  { n: 3, titulo: "Algo Se Moveu" },
-] as const;
+type Arquivo = { href: string; nome: string };
+
+export const DIAS: { n: number; titulo: string; inputs: Arquivo[] }[] = [
+  { n: 1, titulo: "Censo Estelar", inputs: [{ href: "/inputs/dia01.png", nome: "baixe sua placa" }] },
+  { n: 2, titulo: "Sussurro no Azul", inputs: [{ href: "/inputs/dia02.png", nome: "baixe sua imagem" }] },
+  {
+    n: 3,
+    titulo: "Algo Se Moveu",
+    inputs: [
+      { href: "/inputs/dia03_a.png", nome: "baixe a placa A" },
+      { href: "/inputs/dia03_b.png", nome: "a placa B" },
+    ],
+  },
+];
 
 export const DIAS_ATIVOS = DIAS.length;
 

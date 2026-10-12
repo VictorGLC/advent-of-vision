@@ -15,10 +15,10 @@ npm run build && npm start
 ## Estrutura
 
 - `src/app/dia/[n]/page.tsx`: página de cada dia (gerada estaticamente).
-- `src/conteudo/DiaN.tsx`: enunciado e resolução de cada dia.
+- `src/conteudo/DiaN.tsx`: enunciado de cada dia.
 - `src/app/api/responder/route.ts`: confere a resposta no servidor, comparando o SHA-256 de `pixels-d<dia>:<resposta>`; as respostas não ficam no repositório nem no bundle do cliente.
-- `src/lib/dias.ts`: lista de dias publicados. Para adicionar um dia, inclua-o aqui, crie `src/conteudo/DiaN.tsx`, registre-o em `src/conteudo/index.ts` e adicione o hash em `src/lib/respostas.ts`.
-- `public/inputs`, `public/exemplos`, `public/solucoes`: imagens. São servidas sem recompressão, o que importa para o dia 2.
+- `src/lib/dias.ts`: lista de dias publicados. Para adicionar um dia, inclua-o aqui, crie `src/conteudo/DiaN.tsx` com o enunciado, registre-o em `src/conteudo/index.ts` e adicione o hash em `src/lib/respostas.ts`.
+- `public/inputs` e `public/exemplos`: imagens. São servidas sem recompressão, o que importa para o dia 2.
 
 As estrelas ficam no `localStorage` do navegador.
 

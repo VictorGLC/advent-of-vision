@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 
+// Guarda, por dia, a resposta aceita. Ter uma entrada = ter a estrela.
 const KEY = "advent-of-vision-estrelas";
 const EVENTO = "aov-estrelas";
 const VAZIO = "{}";
@@ -23,9 +24,13 @@ function assinar(cb: () => void) {
   };
 }
 
-function parse(raw: string): Record<string, boolean> {
+function parse(raw: string): Record<string, string> {
   try {
-    return JSON.parse(raw) || {};
+    const obj = JSON.parse(raw) || {};
+    // versão anterior guardava `true` em vez da resposta
+    return Object.fromEntries(
+      Object.entries(obj).filter(([, v]) => v).map(([k, v]) => [k, typeof v === "string" ? v : ""]),
+    );
   } catch {
     return {};
   }
@@ -36,9 +41,9 @@ export function useEstrelas() {
   return parse(raw);
 }
 
-export function ganharEstrela(dia: number) {
+export function ganharEstrela(dia: number, resposta: string) {
   const atual = parse(ler());
-  atual[dia] = true;
+  atual[dia] = resposta;
   try {
     localStorage.setItem(KEY, JSON.stringify(atual));
   } catch {}
