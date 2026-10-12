@@ -1,0 +1,44 @@
+# Dia 1 na mão: Pillow só para abrir o PNG, NumPy para o array,
+# e a rotulagem de componentes conexos feita com uma busca em largura.
+# uso: python dia01_manual.py dia01.png
+import sys
+from collections import deque
+
+import numpy as np
+from PIL import Image
+
+img = np.array(Image.open(sys.argv[1]).convert("L"))
+h, w = img.shape
+mascara = img >= 100
+
+VIZINHOS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+
+def componentes(mascara):
+    """Devolve a lista de componentes, cada um como lista de (y, x)."""
+    visitado = np.zeros_like(mascara, dtype=bool)
+    saida = []
+    # só percorre pixels acesos, que são poucos perto da imagem inteira
+    for y0, x0 in zip(*np.nonzero(mascara)):
+        if visitado[y0, x0]:
+            continue
+        visitado[y0, x0] = True
+        fila = deque([(y0, x0)])
+        pixels = []
+        while fila:
+            y, x = fila.popleft()
+            pixels.append((y, x))
+            for dy, dx in VIZINHOS:
+                ny, nx = y + dy, x + dx
+                if 0 <= ny < h and 0 <= nx < w and mascara[ny, nx] and not visitado[ny, nx]:
+                    visitado[ny, nx] = True
+                    fila.append((ny, nx))
+        saida.append(pixels)
+    return saida
+
+
+objs = componentes(mascara)
+estrelas = sum(1 for o in objs if len(o) >= 6)
+
+print(f"objetos: {len(objs)}, raios cósmicos: {len(objs) - estrelas}")
+print(estrelas)

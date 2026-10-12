@@ -18,7 +18,7 @@ code::before {
   left: -2px; right: -2px; top: 3px; bottom: 0;
   border: 1px solid #333340; background: #10101a;
 }
-input[type="text"] {
+input[type="text"], input[type="password"] {
   background: #10101a; border: 1px solid #666666; color: inherit;
   font-family: inherit; font-size: inherit; font-weight: inherit; margin: 0; padding: 0 2px;
 }
@@ -59,6 +59,18 @@ article figure img { display: block; max-width: 100%; height: auto; border: 1px 
 article .imgs { display: flex; flex-wrap: wrap; gap: 1em; }
 .day-success { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
 .wrong { color: #ff6666; }
+
+/* Página de resoluções (/login) */
+.resolucao h3 { color: #ffffff; font-size: 1em; font-weight: normal; margin: 1.5em 0 0.5em; }
+.resolucao section { margin-bottom: 1em; }
+.dim { color: #666666; }
+pre.codigo {
+  font-family: inherit; font-size: 0.8em; line-height: 1.4; margin: 0 0 1em; padding: 0.8em 1em;
+  background: #10101a; border: 1px solid #333340; overflow-x: auto;
+}
+pre.codigo .comentario { color: #6a7a6a; }
+.resolucao figure img { image-rendering: pixelated; }
+.resolucao figcaption { font-size: 0.85em; margin-top: 0.3em; }
 
 /* Calendário em ASCII da página inicial */
 .calendar { white-space: pre; font-family: inherit; line-height: 1.2; margin: 0 0 2em; overflow-x: auto; }
