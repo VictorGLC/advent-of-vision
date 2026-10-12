@@ -1,5 +1,5 @@
 # Dia 1 na mão: Pillow só para abrir o PNG, NumPy para o array,
-# e a rotulagem de componentes conexos feita com uma busca em largura.
+# rotulagem de componentes conexos com busca em largura.
 # uso: python dia01_manual.py dia01.png
 import sys
 from collections import deque
@@ -10,15 +10,13 @@ from PIL import Image
 img = np.array(Image.open(sys.argv[1]).convert("L"))
 h, w = img.shape
 mascara = img >= 100
-
 VIZINHOS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 
 def componentes(mascara):
-    """Devolve a lista de componentes, cada um como lista de (y, x)."""
+    """Lista de componentes, cada um como array de (y, x)."""
     visitado = np.zeros_like(mascara, dtype=bool)
     saida = []
-    # só percorre pixels acesos, que são poucos perto da imagem inteira
     for y0, x0 in zip(*np.nonzero(mascara)):
         if visitado[y0, x0]:
             continue
@@ -33,12 +31,19 @@ def componentes(mascara):
                 if 0 <= ny < h and 0 <= nx < w and mascara[ny, nx] and not visitado[ny, nx]:
                     visitado[ny, nx] = True
                     fila.append((ny, nx))
-        saida.append(pixels)
+        saida.append(np.array(pixels, float))
     return saida
 
 
-objs = componentes(mascara)
-estrelas = sum(1 for o in objs if len(o) >= 6)
+objetos = [o for o in componentes(mascara) if len(o) >= 6]
+print("parte 1:", len(objetos))
 
-print(f"objetos: {len(objs)}, raios cósmicos: {len(objs) - estrelas}")
-print(estrelas)
+
+def alongamento(pixels):
+    """Razão entre os eixos da elipse equivalente (raiz da razão dos autovalores da covariância)."""
+    cov = np.cov(pixels.T, bias=True)
+    l1, l2 = np.linalg.eigvalsh(cov)[::-1]
+    return np.sqrt(l1 / max(l2, 1e-9))
+
+
+print("parte 2:", sum(1 for o in objetos if alongamento(o) < 1.8))

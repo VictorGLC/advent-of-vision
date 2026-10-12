@@ -59,6 +59,14 @@ article figure img { display: block; max-width: 100%; height: auto; border: 1px 
 article .imgs { display: flex; flex-wrap: wrap; gap: 1em; }
 .day-success { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
 .wrong { color: #ff6666; }
+.dim-text { color: #999999; }
+article figure.imgs img { max-width: calc(50% - 0.5em); }
+article figcaption { color: #999999; font-size: 0.85em; margin-top: 0.3em; }
+article .formula { text-align: center; margin: 1em 0; }
+table.tabela { border-collapse: collapse; margin: 0 0 1em 2.5em; }
+table.tabela th { color: #ffffff; font-weight: normal; text-align: left; padding: 0 1.5em 0.3em 0; }
+table.tabela td { padding: 0 1.5em 0 0; }
+header .lang-atual { color: #cccccc; }
 
 /* Página de resoluções (/login) */
 .resolucao h3 { color: #ffffff; font-size: 1em; font-weight: normal; margin: 1.5em 0 0.5em; }
@@ -69,8 +77,11 @@ pre.codigo {
   background: #10101a; border: 1px solid #333340; overflow-x: auto;
 }
 pre.codigo .comentario { color: #6a7a6a; }
-.resolucao figure img { image-rendering: pixelated; }
-.resolucao figcaption { font-size: 0.85em; margin-top: 0.3em; }
+main.largo { max-width: 60em; }
+.resolucao details { margin: 0 0 0.6em; }
+.resolucao summary { cursor: pointer; color: #009900; }
+.resolucao summary:hover { color: #99ff99; }
+.resolucao details pre.codigo { margin-top: 0.5em; }
 
 /* Calendário em ASCII da página inicial */
 .calendar { white-space: pre; font-family: inherit; line-height: 1.2; margin: 0 0 2em; overflow-x: auto; }
@@ -81,7 +92,10 @@ pre.codigo .comentario { color: #6a7a6a; }
 .calendar .c-art { color: #9999cc; }
 .calendar .calendar-day { color: #cccccc; }
 .calendar a:hover .calendar-day { color: #ffffff; }
-.calendar .calendar-mark { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
+/* uma estrela (só a parte 1) fica prateada; as duas, douradas */
+.calendar .calendar-complete .calendar-mark-complete { color: #9999cc; text-shadow: 0 0 5px #9999cc; }
+.calendar .calendar-verycomplete .calendar-mark-complete,
+.calendar .calendar-verycomplete .calendar-mark-verycomplete { color: #ffff66; text-shadow: 0 0 5px #ffff66; }
 .calendar .locked { color: #333340; }
 
 @media (max-width: 600px) {

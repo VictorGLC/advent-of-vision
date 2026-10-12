@@ -1,27 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { DIAS_ATIVOS } from "@/lib/dias";
-import { useEstrelas } from "@/lib/estrelas";
+import { contarEstrelas, useProgresso } from "@/lib/estrelas";
+import { type Lang, LANGS, TEXTOS, rota, trocarIdioma } from "@/lib/i18n";
 
-// Uma linha de céu por dia; as linhas dos dias ainda fechados ficam apagadas.
+// Uma linha por dia: o céu da missão, com a sonda, a antena de Alcântara e o asteroide Jabuticaba.
 const ARTE = [
-  "  .    *     .      .     +    .     .  ",
-  "     .    .     ___    .      *     .   ",
-  "  +    .    .  (___)=====o   .     .    ",
-  "    .     *    /   \\     .    +      .  ",
-  " .     .      /     \\  .     .     *    ",
-  "   *     .   '       '    .      .    . ",
-  "     .      .    +      .    *     .    ",
-  "  .    +       .     .      .    .      ",
-  "     .     .      *     .      +     .  ",
-  "  *     .     .      .     .      .     ",
-  "     .     +      .     *      .     .  ",
-  "  .     .     .      .     .     +      ",
+  "  .    *     .      .     +    .     .    *   ",
+  "     .    .      *     .      .     +     .   ",
+  "  +    .     .      -=[o]=-      .     .      ",
+  "    .     *     .      ' '   .      *     .   ",
+  "  .    .     .      .     .     .   _    .    ",
+  "     *    .    +     .     .     . ( @ )   .  ",
+  "  .     .    .     .     .    *     ~~~    +  ",
+  "    +     .     .     *     .     .     .     ",
+  "  .    .    *      .     .     +     .     .  ",
+  "     .      .    .     *     .     .     *    ",
+  "   ___    .     .    .     .     *     .      ",
+  "  (___)--'  .      +     .     .     .     .  ",
 ];
 
 function Ceu({ linha }: { linha: string }) {
-  // agrupa caracteres consecutivos da mesma classe num só span
   const pedacos: { cls: string; txt: string }[] = [];
   for (const ch of linha) {
     const cls = ch === "." ? "c-dot" : ch === "*" || ch === "+" ? "c-star" : ch === " " ? "" : "c-art";
@@ -36,8 +37,9 @@ function Ceu({ linha }: { linha: string }) {
   );
 }
 
-export function Calendario() {
-  const estrelas = useEstrelas();
+export function Calendario({ lang }: { lang: Lang }) {
+  const progresso = useProgresso();
+  const t = TEXTOS[lang];
   return (
     <pre className="calendar">
       {ARTE.map((linha, i) => {
@@ -49,10 +51,18 @@ export function Calendario() {
             </span>
           );
         }
+        const feito = progresso[d] ?? {};
+        const n = (feito[1] !== undefined ? 1 : 0) + (feito[2] !== undefined ? 1 : 0);
         return (
-          <Link key={d} href={`/dia/${d}`} aria-label={`Dia ${d}${estrelas[d] !== undefined ? ", uma estrela" : ""}`}>
+          <Link
+            key={d}
+            href={rota.dia(lang, d)}
+            className={n === 2 ? "calendar-verycomplete" : n === 1 ? "calendar-complete" : undefined}
+            aria-label={`${t.dia} ${d}${n ? `, ${n === 2 ? t.estrelas : t.estrela}` : ""}`}
+          >
             <Ceu linha={linha} /> <span className="calendar-day">{String(d).padStart(2, " ")}</span>{" "}
-            <span className="calendar-mark">{estrelas[d] !== undefined ? "*" : " "}</span>
+            <span className="calendar-mark-complete">{n >= 1 ? "*" : " "}</span>
+            <span className="calendar-mark-verycomplete">{n === 2 ? "*" : " "}</span>
           </Link>
         );
       })}
@@ -61,6 +71,24 @@ export function Calendario() {
 }
 
 export function Placar() {
-  const n = Object.keys(useEstrelas()).length;
-  return <span className="star-count">{n}*</span>;
+  return <span className="star-count">{contarEstrelas(useProgresso())}*</span>;
+}
+
+export function TrocaIdioma({ lang }: { lang: Lang }) {
+  const caminho = usePathname() ?? "/";
+  return (
+    <>
+      {LANGS.map((l) => (
+        <li key={l}>
+          {l === lang ? (
+            <span className="lang-atual">[{l.toUpperCase()}]</span>
+          ) : (
+            <Link href={trocarIdioma(caminho, l)} hrefLang={l}>
+              [{l.toUpperCase()}]
+            </Link>
+          )}
+        </li>
+      ))}
+    </>
+  );
 }

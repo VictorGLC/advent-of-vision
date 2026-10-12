@@ -1,10 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { RESOLUCOES } from "@/conteudo/resolucoes";
 import { estaLogado, loginAtivo } from "@/lib/admin";
 import { DIAS } from "@/lib/dias";
+import { rota } from "@/lib/i18n";
+import { gabaritoDoDia } from "@/lib/respostas";
 import { sair } from "./actions";
 import { FormLogin } from "./FormLogin";
 
@@ -30,23 +32,28 @@ function Python({ codigo }: { codigo: string }) {
   );
 }
 
+const VERSOES = [
+  { sufixo: "opencv", titulo: "OpenCV" },
+  { sufixo: "manual", titulo: "Pillow + NumPy, na mão" },
+];
+
 export default async function Login() {
   if (!(await estaLogado())) {
     return (
       <article>
         <h2>--- Acesso restrito ---</h2>
-        {loginAtivo() ? (
-          <FormLogin />
-        ) : (
-          <p>Login desativado. Defina ADMIN_PASSWORD no ambiente.</p>
-        )}
+        {loginAtivo() ? <FormLogin /> : <p>Login desativado. Defina ADMIN_PASSWORD no ambiente.</p>}
       </article>
     );
   }
 
   const codigos = await Promise.all(
     RESOLUCOES.map((r) =>
-      Promise.all(r.scripts.map((s) => readFile(path.join(process.cwd(), "solucoes", s.arquivo), "utf8"))),
+      Promise.all(
+        VERSOES.map((v) =>
+          readFile(path.join(process.cwd(), "solucoes", `dia${String(r.dia).padStart(2, "0")}_${v.sufixo}.py`), "utf8"),
+        ),
+      ),
     ),
   );
 
@@ -56,14 +63,15 @@ export default async function Login() {
         <h2>--- Resoluções ---</h2>
         <p>
           Cada dia tem duas soluções: uma com OpenCV e outra feita na mão, só com Pillow para abrir a imagem e
-          NumPy para os arrays. Todas foram rodadas sobre os inputs publicados e batem com as respostas abaixo.
-          Precisa de <code>pip install opencv-python pillow numpy</code>.
+          NumPy para os arrays. Todas foram rodadas sobre os exemplos e os inputs publicados e batem com o gabarito
+          (<code>python puzzles/validar.py</code>). Os inputs são gerados com seed fixa por{" "}
+          <code>python puzzles/gerar.py</code>. Precisa de <code>pip install opencv-python pillow numpy scipy</code>.
         </p>
         <p>
           Ir para:{" "}
           {RESOLUCOES.map((r) => (
             <span key={r.dia}>
-              <a href={`#dia${r.dia}`}>[Dia {r.dia}]</a>{" "}
+              <a href={`#dia${r.dia}`}>[{r.dia}]</a>{" "}
             </span>
           ))}
         </p>
@@ -74,31 +82,33 @@ export default async function Login() {
         </form>
       </article>
 
-      {RESOLUCOES.map((r, i) => (
-        <article key={r.dia} id={`dia${r.dia}`} className="resolucao">
-          <h2>
-            --- Dia {r.dia}: {DIAS[r.dia - 1].titulo} ---
-          </h2>
-          <p>
-            Resposta: <em className="star">{r.resposta}</em> · exemplo do enunciado: <code>{r.exemplo}</code>
-          </p>
-          {r.abordagem}
-          {r.scripts.map((s, j) => (
-            <section key={s.arquivo}>
-              <h3>
-                {s.titulo} <span className="dim">· {s.arquivo}</span>
-              </h3>
-              <p className="dim">$ {s.uso}</p>
-              <Python codigo={codigos[i][j]} />
-            </section>
-          ))}
-          <figure>
-            <img src={`/api/admin/img/${r.imagem.nome}`} width={r.imagem.largura} height={r.imagem.altura} alt={r.imagem.legenda} />
-            <figcaption className="dim">{r.imagem.legenda}</figcaption>
-          </figure>
-          {r.notas}
-        </article>
-      ))}
+      {RESOLUCOES.map((r, i) => {
+        const g = gabaritoDoDia(r.dia);
+        return (
+          <article key={r.dia} id={`dia${r.dia}`} className="resolucao">
+            <h2>
+              --- Dia {r.dia}: {DIAS[r.dia - 1].titulo.pt} --- <Link href={rota.dia("pt", r.dia)}>[enunciado]</Link>
+            </h2>
+            <p>
+              Parte 1: <em className="star">{String(g.input.parte1)}</em> · Parte 2:{" "}
+              <em className="star">{String(g.input.parte2)}</em>{" "}
+              <span className="dim">
+                (exemplo: {String(g.exemplo.parte1)} / {String(g.exemplo.parte2)})
+              </span>
+            </p>
+            {r.abordagem}
+            {r.notas}
+            {VERSOES.map((v, j) => (
+              <details key={v.sufixo}>
+                <summary>
+                  {v.titulo} <span className="dim">· dia{String(r.dia).padStart(2, "0")}_{v.sufixo}.py {r.args}</span>
+                </summary>
+                <Python codigo={codigos[i][j]} />
+              </details>
+            ))}
+          </article>
+        );
+      })}
     </>
   );
 }

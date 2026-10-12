@@ -1,20 +1,37 @@
 import "server-only";
-import { createHash } from "node:crypto";
+import gabarito from "../../puzzles/gabarito.json";
 
-// SHA-256 de "pixels-d<dia>:<resposta normalizada>". As respostas em si não ficam no repositório.
-const HASH: Record<number, string> = {
-  1: "332142da2a47d5b91aaff6a4942c503688682c61793087dba0de0cb874e72a5e",
-  2: "469903ecdd3a0dbb1cc785ef7c7eccead08b5ab0bc24c0c10b3e9e3eddafaeaf",
-  3: "6d8a9452517a25fa09e8b9c47d19a5d0961a946c93b35cb4cf914bea446f8a5c",
-};
+type Partes = { parte1: string | number; parte2: string | number };
+type Entrada = { exemplo: Partes; input: Partes };
+const GAB = gabarito as unknown as Record<string, Entrada>;
 
-export function normalizar(resposta: string) {
-  return resposta.trim().toUpperCase().replace(/\s+/g, "");
+/** Respostas do exemplo e do input de um dia (só para a página de admin). */
+export function gabaritoDoDia(dia: number): Entrada {
+  return GAB[`dia${String(dia).padStart(2, "0")}`];
 }
 
-export function conferir(dia: number, resposta: string) {
-  const esperado = HASH[dia];
-  if (!esperado) return false;
-  const h = createHash("sha256").update(`pixels-d${dia}:${normalizar(resposta)}`).digest("hex");
-  return h === esperado;
+/** Maiúsculas, sem acento, sem espaços nem parênteses: "(209, 195)" vira "209,195". */
+export function normalizar(resposta: string) {
+  return resposta
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toUpperCase()
+    .replace(/[\s()°]/g, "");
+}
+
+export function esperada(dia: number, parte: 1 | 2): string | null {
+  const e = GAB[`dia${String(dia).padStart(2, "0")}`];
+  return e ? String(e.input[`parte${parte}`]) : null;
+}
+
+export function conferir(dia: number, parte: 1 | 2, resposta: string) {
+  const certa = esperada(dia, parte);
+  if (certa === null) return false;
+  const r = normalizar(resposta);
+  // respostas com casa decimal aceitam vírgula e zeros a mais ("17,30" = "17.3")
+  if (/^\d+\.\d+$/.test(certa)) {
+    const num = Number(r.replace(",", "."));
+    return Number.isFinite(num) && num.toFixed(1) === certa && /^\d+([.,]\d+)?$/.test(r);
+  }
+  return r === normalizar(certa);
 }

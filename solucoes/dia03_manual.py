@@ -64,7 +64,16 @@ def dentro(p):
 ca, cb = dentro(ca), dentro(cb)
 
 # 3. para cada objeto, procura o mais próximo na outra placa
-so_a = sum(1 for a in ca if np.hypot(*(cb - a).T).min() > 3)
-so_b = sum(1 for b in cb if np.hypot(*(ca - b).T).min() > 3)
-print(f"só em A: {so_a}, só em B: {so_b}")
-print(so_a * so_b)
+so_a = [a for a in ca if np.hypot(*(cb - a).T).min() > 3]
+so_b = [b for b in cb if np.hypot(*(ca - b).T).min() > 3]
+print(f"só em A: {len(so_a)}, só em B: {len(so_b)}")
+print("parte 1:", len(so_a) * len(so_b))
+
+# parte 2: um asteroide aparece como transiente nas duas placas, pertinho.
+# Para cada transiente de A, o transiente de B mais próximo; se estiver perto, é o mesmo asteroide.
+total = 0
+for a in so_a:
+    d = min(np.hypot(*(b - a)) for b in so_b)
+    if d < 70:
+        total += round(d)
+print("parte 2:", total)
