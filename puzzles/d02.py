@@ -1,7 +1,7 @@
 """Dia 2: Sussurro no Azul.
 
-Parte 1: o texto está no bit 0 do canal azul.
-Parte 2: os bits 0 de R e G parecem ruído cada um, mas R xor G (ou |R - G|) mostra um segundo texto.
+Parte 1: o texto está no bit 0 de um canal (azul no exemplo, vermelho no input).
+Parte 2: os bits 0 dos outros dois canais parecem ruído cada um, mas o xor deles mostra um segundo texto.
 """
 import numpy as np
 
@@ -28,21 +28,24 @@ def nebulosa(rng, w, h):
     return np.clip(np.rint(rgb), 0, 255).astype(np.uint8)
 
 
-def gerar(seed, w, h, codigo1, codigo2, tamanho):
+def gerar(seed, w, h, codigo1, codigo2, tamanho, canal=2):
+    """`canal` (0=R, 1=G, 2=B) guarda o código principal; os outros dois guardam o reserva."""
     rng = rng_de(seed)
     img = nebulosa(rng, w, h)
     texto1 = mascara_texto(w, h, codigo1, tamanho).astype(np.uint8)
     texto2 = mascara_texto(w, h, codigo2, tamanho).astype(np.uint8)
-    r_lsb = rng.integers(0, 2, (h, w), dtype=np.uint8)
-    img[..., 0] = (img[..., 0] & 0xFE) | r_lsb
-    img[..., 1] = (img[..., 1] & 0xFE) | (r_lsb ^ texto2)
-    img[..., 2] = (img[..., 2] & 0xFE) | texto1
+    c1, c2 = [c for c in range(3) if c != canal]
+    sorteio = rng.integers(0, 2, (h, w), dtype=np.uint8)
+    img[..., c1] = (img[..., c1] & 0xFE) | sorteio
+    img[..., c2] = (img[..., c2] & 0xFE) | (sorteio ^ texto2)
+    img[..., canal] = (img[..., canal] & 0xFE) | texto1
     return img, {"parte1": codigo1, "parte2": codigo2}
 
 
 def produzir(salvar_png):
     img, ex = gerar(seed=202, w=360, h=120, codigo1="PIXEL42", codigo2="OK7", tamanho=48)
     salvar_png(img, "exemplos/dia02.png")
-    img, inp = gerar(seed=2002, w=1600, h=900, codigo1="KX7VEGA3", codigo2="NATA1985", tamanho=170)
+    img, inp = gerar(seed=2002, w=1600, h=900, codigo1="KX7VEGA3", codigo2="NATA1985", tamanho=170,
+                     canal=0)
     salvar_png(img, "inputs/dia02.png")
     return {"exemplo": ex, "input": inp}

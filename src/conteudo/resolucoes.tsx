@@ -37,8 +37,9 @@ export const RESOLUCOES: Resolucao[] = [
     args: "dia02.png",
     abordagem: (
       <p>
-        Parte 1: plano de bit 0 de cada canal; dois são ruído (50% de uns) e o azul tem o texto (3,5%). Parte 2: R
-        e G são ruído cada um, mas R xor G (ou |R - G| nos bits 0) mostra o segundo código. Ler o texto é a única
+        Parte 1: plano de bit 0 de cada canal; dois são ruído (50% de uns) e um tem o texto (3,5%). No exemplo do
+        enunciado é o azul; no input é o vermelho, para o exemplo não entregar o canal. Parte 2: os outros dois (G e
+        B no input) são ruído cada um, mas o xor deles mostra o segundo código. Ler o texto é a única
         etapa a olho, de propósito.
       </p>
     ),
@@ -209,8 +210,10 @@ export const RESOLUCOES: Resolucao[] = [
     ),
     notas: (
       <p>
-        <em>Margem:</em> 732 estrelas casadas, ângulo estimado 17,300° (o certo é 17,3). Razão típica 1,29, a da
-        variável 0,40. Leva uns 20 s em Python por causa da busca do ângulo.
+        <em>Margem:</em> 732 estrelas casadas, ângulo estimado 17,300° (o certo é 17,3). Tirando as estrelas a
+        menos de 10 px da borda de qualquer placa (regra do enunciado), sobram 710: razões de 1,20 a 1,39 e a
+        variável com 0,40. Sem esse filtro, estrelas cortadas pela borda chegam a 0,54. Leva uns 20 s em Python por
+        causa da busca do ângulo.
       </p>
     ),
   },

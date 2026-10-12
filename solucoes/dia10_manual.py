@@ -78,6 +78,11 @@ angulo = np.degrees(np.arctan2(R[1, 0], R[0, 0]))
 print(f"{len(ia)} estrelas casadas, ângulo {angulo:.3f}")
 print("parte 1:", f"{abs(angulo):.1f}")
 
+# parte 2: estrela cortada pela borda de qualquer placa perde brilho e não vale
+h, w = np.array(Image.open(sys.argv[1])).shape
+borda = lambda p: (p[:, 0] > 10) & (p[:, 0] < w - 10) & (p[:, 1] > 10) & (p[:, 1] < h - 10)
+inteiras = borda(pa[ia]) & borda(pb[ib])
+ia, ib = ia[inteiras], ib[inteiras]
 razao = fb[ib] / fa[ia]
 x, y = pa[ia[razao.argmin()]]
 print(f"razão típica {np.median(razao):.2f}, menor {razao.min():.2f}")

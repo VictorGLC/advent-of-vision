@@ -61,7 +61,13 @@ angulo = np.degrees(np.arctan2(M[1, 0], M[0, 0]))
 print(f"{len(ia)} estrelas casadas, ângulo {angulo:.3f}")
 print("parte 1:", f"{abs(angulo):.1f}")
 
-# parte 2: a placa B tem outro ganho, então compara a razão de fluxos com a razão típica
+# parte 2: a placa B tem outro ganho, então compara a razão de fluxos com a razão típica.
+# Estrela cortada pela borda de qualquer placa perde brilho e não vale.
+h, w = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE).shape
+def longe_da_borda(p):
+    return (p[:, 0] > 10) & (p[:, 0] < w - 10) & (p[:, 1] > 10) & (p[:, 1] < h - 10)
+inteiras = longe_da_borda(pa[ia]) & longe_da_borda(pb[ib])
+ia, ib = ia[inteiras], ib[inteiras]
 razao = fb[ib] / fa[ia]
 print(f"razão típica B/A: {np.median(razao):.2f}; a mais estranha: {razao.min():.2f}")
 x, y = pa[ia[razao.argmin()]]
