@@ -1,0 +1,215 @@
+{
+  "dia01": {
+    "exemplo": {
+      "parte1": 11,
+      "parte2": 8
+    },
+    "input": {
+      "parte1": 1873,
+      "parte2": 1517
+    }
+  },
+  "dia02": {
+    "exemplo": {
+      "parte1": "PIXEL42",
+      "parte2": "OK7"
+    },
+    "input": {
+      "parte1": "KX7VEGA3",
+      "parte2": "NATA1985"
+    }
+  },
+  "dia03": {
+    "exemplo": {
+      "parte1": 6,
+      "parte2": 51,
+      "desloc": [
+        -23,
+        11
+      ],
+      "so_a": 2,
+      "so_b": 3,
+      "dists": [
+        51
+      ]
+    },
+    "input": {
+      "parte1": 832,
+      "parte2": 361,
+      "desloc": [
+        -137,
+        58
+      ],
+      "so_a": 26,
+      "so_b": 32,
+      "dists": [
+        45,
+        41,
+        40,
+        41,
+        30,
+        53,
+        37,
+        29,
+        45
+      ]
+    }
+  },
+  "dia04": {
+    "exemplo": {
+      "parte1": 3,
+      "parte2": 4
+    },
+    "input": {
+      "parte1": 61,
+      "parte2": 219
+    }
+  },
+  "dia05": {
+    "exemplo": {
+      "parte1": 13,
+      "parte2": 2
+    },
+    "input": {
+      "parte1": 969,
+      "parte2": 153
+    }
+  },
+  "dia06": {
+    "exemplo": {
+      "parte1": "184,58",
+      "parte2": 2,
+      "comprimentos": [
+        175,
+        110,
+        80
+      ],
+      "rovers": [
+        [
+          184,
+          58
+        ],
+        [
+          74,
+          131
+        ],
+        [
+          99,
+          59
+        ]
+      ]
+    },
+    "input": {
+      "parte1": "209,195",
+      "parte2": 6,
+      "comprimentos": [
+        640,
+        420,
+        950,
+        520,
+        360,
+        480
+      ],
+      "rovers": [
+        [
+          797,
+          845
+        ],
+        [
+          335,
+          682
+        ],
+        [
+          209,
+          195
+        ],
+        [
+          823,
+          301
+        ],
+        [
+          1047,
+          484
+        ],
+        [
+          922,
+          860
+        ]
+      ]
+    }
+  },
+  "dia07": {
+    "exemplo": {
+      "parte1": "4207",
+      "parte2": "8150"
+    },
+    "input": {
+      "parte1": "230624789682",
+      "parte2": "442719217810"
+    }
+  },
+  "dia08": {
+    "exemplo": {
+      "parte1": 48,
+      "parte2": "OI",
+      "cantos": [
+        1,
+        2,
+        3,
+        8
+      ]
+    },
+    "input": {
+      "parte1": 156000,
+      "parte2": "CAFE",
+      "cantos": [
+        13,
+        15,
+        25,
+        32
+      ]
+    }
+  },
+  "dia09": {
+    "exemplo": {
+      "parte1": "42",
+      "parte2": "SOS"
+    },
+    "input": {
+      "parte1": "730514",
+      "parte2": "PIPOCA"
+    }
+  },
+  "dia10": {
+    "exemplo": {
+      "parte1": "12.5",
+      "parte2": "188,103",
+      "comuns": 105
+    },
+    "input": {
+      "parte1": "17.3",
+      "parte2": "902,517",
+      "comuns": 747
+    }
+  },
+  "dia11": {
+    "exemplo": {
+      "parte1": 2,
+      "parte2": 20
+    },
+    "input": {
+      "parte1": 17,
+      "parte2": 16
+    }
+  },
+  "dia12": {
+    "exemplo": {
+      "parte1": 37,
+      "parte2": "42"
+    },
+    "input": {
+      "parte1": 613,
+      "parte2": "SAUDADE"
+    }
+  }
+}
