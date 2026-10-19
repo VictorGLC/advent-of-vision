@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { type Lang, rota } from "@/lib/i18n";
+import { metaPagina } from "@/lib/seo";
 
 type Props = { params: Promise<{ lang: Lang }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  return { title: lang === "en" ? "About" : "Sobre" };
+  return lang === "en"
+    ? metaPagina(lang, rota.sobre, "About", "What Advent of Vision is: 12 image processing puzzles, each with two parts and an exact answer, telling the story of a Brazilian space probe.")
+    : metaPagina(lang, rota.sobre, "Sobre", "O que é o Advent of Vision: 12 puzzles de processamento de imagens, cada um com duas partes e resposta exata, contando a história de uma sonda espacial brasileira.");
 }
 
 export default async function Sobre({ params }: Props) {

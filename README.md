@@ -34,4 +34,4 @@ python puzzles/validar.py        # roda as 24 soluções de solucoes/ e confere 
 
 ## Deploy
 
-Funciona direto na Vercel. Lembre de definir `ADMIN_PASSWORD` nas variáveis de ambiente do projeto.
+Funciona direto na Vercel. Lembre de definir `ADMIN_PASSWORD` nas variáveis de ambiente do projeto. Fora da Vercel, defina também `NEXT_PUBLIC_SITE_URL` (ex.: `https://meusite.com`), usada no canonical, no `sitemap.xml` e no `robots.txt`.

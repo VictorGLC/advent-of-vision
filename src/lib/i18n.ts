@@ -38,6 +38,9 @@ export const TEXTOS = {
     problema: "✗ deu algum problema ao conferir · tenta de novo daqui a pouco",
     todos: "todos os dias",
     inspirado: "Inspirado no",
+    slogan: "Advent of Vision 2026: puzzles de processamento de imagens",
+    descricao:
+      "12 puzzles de programação em que o input é uma imagem. Resolva com processamento de imagens clássico, em OpenCV, NumPy ou na mão. Inspirado no Advent of Code.",
   },
   en: {
     sobre: "about",
@@ -53,5 +56,8 @@ export const TEXTOS = {
     problema: "✗ something went wrong while checking · try again in a moment",
     todos: "all days",
     inspirado: "Inspired by",
+    slogan: "Advent of Vision 2026: image processing puzzles",
+    descricao:
+      "12 programming puzzles where the input is an image. Solve them with classic image processing, in OpenCV, NumPy or by hand. Inspired by Advent of Code.",
   },
 } satisfies Record<Lang, Record<string, string>>;

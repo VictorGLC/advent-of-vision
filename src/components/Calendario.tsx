@@ -19,7 +19,7 @@ export function Calendario({ lang }: { lang: Lang }) {
   const t = TEXTOS[lang];
   return (
     <>
-      <h1 className="so-leitor">Advent of Vision 2026</h1>
+      <h1 className="so-leitor">{t.slogan}</h1>
       <p className="caminho">
         ~/advent-of-vision/2026 · {DIAS.length} {t.dias} · {DIAS.length * 2} {MARCA}
       </p>

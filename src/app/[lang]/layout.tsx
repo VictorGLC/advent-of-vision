@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Cabecalho } from "@/components/Cabecalho";
 import { LANGS, ehLang } from "@/lib/i18n";
+import { NOME, SITE } from "@/lib/seo";
 import { fontes } from "../fonte";
 import "../globals.css";
 
@@ -11,19 +12,12 @@ export function generateStaticParams() {
   return LANGS.map((lang) => ({ lang }));
 }
 
-const DESCRICAO = {
-  pt: "Puzzles de processamento de imagens inspirados no Advent of Code: você recebe uma imagem e descobre alguma coisa sobre ela.",
-  en: "Image processing puzzles inspired by Advent of Code: you get an image and find something out about it.",
+// Título, descrição, canonical e hreflang ficam em cada página (metaPagina).
+export const metadata: Metadata = {
+  metadataBase: SITE,
+  title: { default: NOME, template: `%s · ${NOME}` },
+  twitter: { card: "summary" },
 };
-
-export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
-  const { lang } = await params;
-  return {
-    title: { default: "Advent of Vision", template: "%s - Advent of Vision" },
-    description: ehLang(lang) ? DESCRICAO[lang] : DESCRICAO.pt,
-    alternates: { languages: { "pt-BR": "/pt", en: "/en" } },
-  };
-}
 
 export default async function LangLayout({
   children,
